@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="PlatePlanr">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="plate" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#ecfdf5"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+
+  <!-- Plate -->
+  <circle cx="256" cy="292" r="122" fill="url(#plate)"/>
+  <circle cx="256" cy="292" r="98" fill="none" stroke="#059669" stroke-width="6" opacity="0.18"/>
+  <ellipse cx="256" cy="308" rx="68" ry="20" fill="#a7f3d0" opacity="0.5"/>
+
+  <!-- Fork (left) -->
+  <g fill="#ffffff">
+    <rect x="118" y="96" width="7" height="78" rx="3.5"/>
+    <rect x="128" y="96" width="7" height="78" rx="3.5"/>
+    <rect x="138" y="96" width="7" height="78" rx="3.5"/>
+    <rect x="148" y="96" width="7" height="78" rx="3.5"/>
+    <rect x="124" y="168" width="26" height="196" rx="13"/>
+  </g>
+
+  <!-- Knife (right) -->
+  <g fill="#ffffff">
+    <path d="M358 96 L404 112 L358 188 Z"/>
+    <rect x="368" y="184" width="18" height="180" rx="9"/>
+  </g>
+
+  <!-- Spoon (top) -->
+  <g fill="#ffffff">
+    <ellipse cx="256" cy="118" rx="26" ry="34"/>
+    <rect x="247" y="146" width="18" height="108" rx="9"/>
+  </g>
+</svg>

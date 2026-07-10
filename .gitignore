@@ -1,0 +1,10 @@
+# Secrets — never deploy these
+kroger-config.json
+walmart-config.json
+store-apis-config.json
+config.local.js
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

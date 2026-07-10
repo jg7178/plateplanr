@@ -1,0 +1,8 @@
+{
+  "name": "plateplanr-functions",
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "stripe": "^17.4.0"
+  }
+}

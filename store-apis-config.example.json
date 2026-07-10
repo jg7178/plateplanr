@@ -1,0 +1,17 @@
+{
+  "kroger": {
+    "clientId": "your-kroger-client-id",
+    "clientSecret": "your-kroger-client-secret"
+  },
+  "walmart": {
+    "consumerId": "your-walmart-consumer-id",
+    "privateKey": "your-walmart-private-key",
+    "keyVersion": "1"
+  },
+  "rapidApi": {
+    "key": "optional-rapidapi-key-for-walmart-prices"
+  },
+  "serpApi": {
+    "key": "optional-serpapi-key-for-google-shopping-prices"
+  }
+}

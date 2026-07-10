@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="PlatePlanr">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta http-equiv="Permissions-Policy" content="camera=(self)">
+  <title>PlatePlanr — Plan your plate. Prep your week</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+    :root {
+      --emerald: #059669;
+      --emerald-light: #d1fae5;
+      --surface: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #ecfdf5 100%);
+      min-height: 100vh;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1.25rem;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.06), 0 4px 16px rgb(0 0 0 / 0.04);
+      border: 1px solid rgb(226 232 240 / 0.8);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 0.75rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgb(16 185 129 / 0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgb(16 185 129 / 0.4);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      background: white;
+      color: #059669;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 0.75rem;
+      border: 1.5px solid #a7f3d0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: #ecfdf5; }
+
+    .btn-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.625rem;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-icon:hover { background: #f1f5f9; color: #334155; }
+
+    .btn-ghost {
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 0.875rem;
+      cursor: pointer;
+      border-radius: 0.5rem;
+    }
+    .btn-ghost:hover { background: #f1f5f9; }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #64748b;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .nav-btn:hover { color: #059669; background: #ecfdf5; }
+    .nav-btn.active {
+      color: #047857;
+      background: #d1fae5;
+      font-weight: 600;
+    }
+    .nav-btn i { width: 1rem; text-align: center; }
+    .nav-btn .badge, .mobile-nav-btn .badge {
+      margin-left: 0.25rem;
+      padding: 0.1rem 0.4rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      line-height: 1;
+      color: white;
+      background: #10b981;
+      border-radius: 9999px;
+    }
+    .mobile-nav-btn .badge {
+      position: absolute;
+      top: 0.15rem;
+      right: calc(50% - 1.25rem);
+      margin-left: 0;
+    }
+    .mobile-nav-btn { position: relative; }
+
+    .meal-slot {
+      min-height: 4.5rem;
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .meal-slot:hover { border-color: #6ee7b7; background: #ecfdf5; }
+    .meal-slot.has-meal {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border: 1.5px solid #6ee7b7;
+      border-style: solid;
+    }
+    .meal-slot.meal-now { box-shadow: 0 0 0 2px #10b981; background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+    .meal-slot.meal-missed { border-color: #fcd34d; background: linear-gradient(135deg, #fffbeb, #fef3c7); }
+    .meal-slot.meal-upcoming { border-color: #93c5fd; }
+
+    .meal-edit-btn {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 0.375rem;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid #a7f3d0;
+      color: #047857;
+      font-size: 0.55rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .meal-slot.has-meal:hover .meal-edit-btn { opacity: 1; }
+
+    .recipe-link {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 2px;
+      transition: color 0.15s, text-decoration-color 0.15s;
+    }
+    .recipe-link:hover {
+      color: #047857;
+      text-decoration-color: #6ee7b7;
+    }
+    .recipe-link-lg { font-weight: 700; }
+
+    .recipe-view-btn {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      border: 1px solid #e2e8f0;
+      background: white;
+      color: #047857;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .recipe-view-btn:hover {
+      background: #ecfdf5;
+      border-color: #6ee7b7;
+    }
+
+    .recipe-steps-newbie { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .recipe-step-card {
+      display: flex;
+      gap: 0.875rem;
+      padding: 0.875rem 1rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.875rem;
+      transition: border-color 0.15s;
+    }
+    .recipe-step-card:hover { border-color: #a7f3d0; }
+    .recipe-step-card.recipe-step-prep {
+      background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+      border-color: #6ee7b7;
+    }
+
+    .recipe-step-num {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      background: #10b981;
+      color: white;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .recipe-step-num.prep { background: #047857; font-size: 1rem; }
+
+    .recipe-step-body { flex: 1; min-width: 0; }
+
+    .recipe-step-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .recipe-step-label.label-emerald { color: #047857; }
+    .recipe-step-label.label-orange { color: #c2410c; }
+    .recipe-step-label.label-red { color: #b91c1c; }
+    .recipe-step-label.label-blue { color: #1d4ed8; }
+    .recipe-step-label.label-purple { color: #7c3aed; }
+    .recipe-step-label.label-amber { color: #b45309; }
+    .recipe-step-label.label-slate { color: #64748b; }
+
+    .recipe-step-text {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .recipe-step-tips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+    }
+    .recipe-step-tips span {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 9999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .recipe-step-hints {
+      font-size: 0.7rem;
+      color: #b45309;
+      margin-top: 0.4rem;
+      padding: 0.4rem 0.6rem;
+      background: #fffbeb;
+      border-radius: 0.5rem;
+      line-height: 1.4;
+    }
+    .recipe-step-hints i { margin-right: 0.25rem; }
+
+    .meal-clickable {
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+    .meal-clickable:hover {
+      border-color: #6ee7b7 !important;
+      box-shadow: 0 2px 8px rgb(16 185 129 / 0.12);
+    }
+    .schedule-row.meal-clickable:hover { background: #f0fdf4 !important; }
+
+    .calorie-summary-card:hover {
+      border-color: #a7f3d0;
+      box-shadow: 0 4px 12px rgb(16 185 129 / 0.08);
+    }
+
+    .schedule-row.meal-now { background: #ecfdf5; border-color: #6ee7b7 !important; }
+    .schedule-row.meal-missed { background: #fffbeb; border-color: #fcd34d !important; }
+    .schedule-row.meal-upcoming { background: #eff6ff; border-color: #bfdbfe !important; }
+
+    .recipe-card {
+      padding: 1rem;
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .recipe-card:hover { border-color: #6ee7b7; transform: translateX(2px); }
+    .recipe-card.active {
+      border-color: #10b981;
+      background: #ecfdf5;
+      box-shadow: 0 0 0 3px rgb(16 185 129 / 0.15);
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+      background: #f1f5f9;
+      color: #64748b;
+      border-radius: 9999px;
+      text-transform: capitalize;
+    }
+
+    .recipe-category-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .recipe-cat-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.75rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 9999px;
+      background: white;
+      color: #64748b;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: capitalize;
+    }
+
+    .recipe-cat-btn:hover {
+      border-color: #a7f3d0;
+      color: #047857;
+      background: #f0fdf4;
+    }
+
+    .recipe-cat-btn.active {
+      border-color: #10b981;
+      background: #ecfdf5;
+      color: #047857;
+      box-shadow: 0 0 0 2px rgb(16 185 129 / 0.12);
+    }
+
+    .recipe-cat-count {
+      font-size: 0.65rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: #64748b;
+      line-height: 1.2;
+    }
+
+    .recipe-cat-btn.active .recipe-cat-count {
+      background: #d1fae5;
+      color: #047857;
+    }
+
+    .recipe-category-section + .recipe-category-section {
+      margin-top: 1rem;
+      padding-top: 0.25rem;
+    }
+
+    .recipe-category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 1.75rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      z-index: 5;
+    }
+
+    .recipe-category-count {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    .recipe-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      background: #ecfdf5;
+      color: #047857;
+      text-transform: capitalize;
+    }
+
+    .recipe-category-empty {
+      padding: 1.5rem 1rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #64748b;
+      background: #f8fafc;
+      border: 1px dashed #e2e8f0;
+      border-radius: 0.875rem;
+    }
+
+    .grocery-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.875rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .grocery-item:hover { border-color: #a7f3d0; }
+    .grocery-item.checked { opacity: 0.7; }
+
+    .grocery-price {
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      flex-shrink: 0;
+    }
+    .grocery-price.kroger { color: #047857; background: #d1fae5; }
+    .grocery-price.target { color: #b91c1c; background: #fee2e2; }
+    .grocery-price.walmart { color: #1d4ed8; background: #dbeafe; }
+    .grocery-price.openfoodfacts { color: #7c3aed; background: #ede9fe; }
+    .grocery-price.serpapi { color: #c2410c; background: #ffedd5; }
+    .grocery-price.est { color: #475569; background: #f1f5f9; }
+
+    .retail-container-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      text-transform: capitalize;
+    }
+
+    .order-mode-btn { cursor: pointer; }
+    .order-mode-btn:hover { transform: translateY(-1px); }
+
+    .api-badges { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .api-badge { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 9999px; font-weight: 600; }
+    .api-badge.on { background: #d1fae5; color: #047857; }
+    .api-badge.off { background: #f1f5f9; color: #94a3b8; }
+
+    .shop-use-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: #64748b;
+    }
+    .shop-use-badge.shared { background: #d1fae5; color: #047857; }
+    .shop-use-badge.over { background: #fef3c7; color: #b45309; }
+
+    .reuse-toggle-btn {
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .reuse-toggle-btn:hover { color: #047857; background: rgba(255,255,255,0.6); }
+    .reuse-toggle-btn.active {
+      background: white;
+      color: #047857;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.08);
+    }
+
+    .goal-preset-btn.active {
+      border-color: #10b981 !important;
+      background: #ecfdf5;
+      box-shadow: 0 0 0 2px rgb(16 185 129 / 0.15);
+    }
+
+    .family-preset-btn.active {
+      border-color: #8b5cf6 !important;
+      background: #f5f3ff;
+      box-shadow: 0 0 0 2px rgb(139 92 246 / 0.15);
+    }
+
+    .autofill-style-btn.active {
+      border-color: #10b981 !important;
+      background: #ecfdf5;
+      box-shadow: 0 0 0 2px rgb(16 185 129 / 0.15);
+    }
+
+    .family-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      background: #f5f3ff;
+      color: #6d28d9;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .ban-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.3rem 0.55rem;
+      border-radius: 9999px;
+      border: 1px solid transparent;
+    }
+    .ban-chip-allergy {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+    .ban-chip-dislike {
+      background: #fffbeb;
+      color: #b45309;
+      border-color: #fde68a;
+    }
+    .ban-chip button {
+      border: none;
+      background: transparent;
+      color: inherit;
+      opacity: 0.55;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+    .ban-chip button:hover { opacity: 1; }
+
+    .ban-suggest-btn {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 0.55rem;
+      border-radius: 9999px;
+      border: 1px solid #e2e8f0;
+      background: white;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ban-suggest-btn:hover { border-color: #cbd5e1; background: #f8fafc; }
+    .ban-suggest-btn.added {
+      border-color: #86efac;
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    .ban-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    .checkbox {
+      width: 1.375rem;
+      height: 1.375rem;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.375rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .checkbox.checked {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .quick-recipe-card {
+      padding: 0.875rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quick-recipe-card:hover {
+      background: #ecfdf5;
+      border-color: #6ee7b7;
+    }
+
+    .quick-recipe-card-logged {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 0.875rem;
+    }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: #047857; }
+    .stat-label { font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem; }
+
+    .nutrition-pill {
+      text-align: center;
+      padding: 0.75rem;
+      background: #f8fafc;
+      border-radius: 0.75rem;
+    }
+
+    .label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 0.375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .input {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.625rem;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+    }
+    .input:focus { border-color: #34d399; box-shadow: 0 0 0 3px rgb(52 211 153 / 0.15); }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgb(15 23 42 / 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 50;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 28rem;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgb(0 0 0 / 0.2);
+      animation: slideUp 0.25s ease;
+    }
+    .modal-content-lg { max-width: 32rem; }
+
+    #barcode-reader video {
+      width: 100% !important;
+      border-radius: 0.75rem;
+      object-fit: cover;
+    }
+    #barcode-reader img[alt="Info icon"] { display: none; }
+
+    .mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom));
+      z-index: 40;
+      box-shadow: 0 -4px 16px rgb(0 0 0 / 0.06);
+    }
+    .mobile-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      padding: 0.375rem 0.75rem;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.65rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 0.5rem;
+      transition: color 0.15s;
+    }
+    .mobile-nav-btn i { font-size: 1.125rem; }
+    .mobile-nav-btn.active { color: #059669; }
+    .mobile-nav-btn.active i { color: #10b981; }
+
+    .auth-btn {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 9999px;
+      background: #ecfdf5;
+      color: #059669;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+    }
+
+    .view-enter {
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgb(16 185 129 / 0.35);
+    }
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      main { padding-bottom: 5rem; }
+      footer { padding-bottom: 5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200/60">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="logo-icon">
+            <img src="icon.svg" alt="" width="40" height="40">
+          </div>
+          <div>
+            <h1 id="app-name" class="text-lg font-bold text-slate-800 leading-tight">PlatePlanr</h1>
+            <p id="app-tagline" class="text-xs text-slate-400">Plan your plate. Prep your week</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <nav id="nav-buttons" class="flex items-center gap-1 overflow-x-auto"></nav>
+          <button id="auth-header-btn" onclick="App.openAuthModal('signin')" class="auth-btn md:hidden" title="Account">
+            <i class="fa-solid fa-user"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-6" id="main-content"></main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-400">
+      <span id="app-footer-brand">PlatePlanr</span> · Works offline · <span id="sync-label">Local storage</span>
+    </footer>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <nav id="mobile-nav" class="mobile-nav md:hidden"></nav>
+
+  <!-- Modal -->
+  <div id="modal-overlay" class="hidden"></div>
+
+  <script src="recipes-catalog.js"></script>
+  <script src="instruction-helper.js"></script>
+  <script src="nutrition-calculator.js"></script>
+  <script src="family-settings.js"></script>
+  <script src="ban-list.js"></script>
+  <script src="price-database.js"></script>
+  <script src="data.js"></script>
+  <script src="config.js"></script>
+  <script src="config.local.js"></script>
+  <script src="idb.js"></script>
+  <!-- Firebase (loaded for optional cloud sync) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="auth.js"></script>
+  <script src="billing.js"></script>
+  <script src="barcode.js"></script>
+  <script src="photo.js"></script>
+  <script src="store-apis.js"></script>
+  <script src="grocery-units.js"></script>
+  <script src="grocery-prices.js"></script>
+  <script src="grocery-order.js"></script>
+  <script src="meal-planner-smart.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

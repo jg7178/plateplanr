@@ -1,0 +1,5 @@
+{
+  "consumerId": "your-walmart-consumer-id",
+  "privateKey": "your-walmart-private-key-pkcs8",
+  "keyVersion": "1"
+}
