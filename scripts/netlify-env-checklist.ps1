@@ -24,6 +24,6 @@ if ($site) {
   Write-Host "`nStripe webhook URL:" -ForegroundColor Yellow
   Write-Host "  $site/.netlify/functions/stripe-webhook`n"
   Write-Host "Firebase authorized domain (Auth -> Settings -> Authorized domains):" -ForegroundColor Yellow
-  $host = ([uri]$site).Host
-  Write-Host "  $host`n"
+  $domain = ([uri]$site).Host
+  Write-Host "  $domain`n"
 }

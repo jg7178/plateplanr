@@ -2,7 +2,10 @@
 
 [build]
   publish = "."
-  command = "node scripts/netlify-config.js"
+  command = "npm install --prefix netlify/functions && node scripts/netlify-config.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
 
 [functions]
   directory = "netlify/functions"

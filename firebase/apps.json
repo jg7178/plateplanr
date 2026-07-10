@@ -1,0 +1,12 @@
+{
+  "projectId": "plateplanr-17793",
+  "projectNumber": "154688205764",
+  "ios": {
+    "appId": "1:154688205764:ios:efc2244400a5bd25012a91",
+    "bundleId": "com.pluginrides.plateplanr"
+  },
+  "web": {
+    "appId": "1:154688205764:web:5dd9e52ca9da0d1b012a91",
+    "measurementId": "G-1LT7RCYF2K"
+  }
+}

@@ -11,7 +11,12 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
 }
 
 Write-Host "Installing Netlify CLI (one-time)..." -ForegroundColor Cyan
-npm install -g netlify-cli 2>$null | Out-Null
+$prevEap = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
+& "$env:ProgramFiles\nodejs\npm.cmd" install -g netlify-cli *>$null
+$ErrorActionPreference = $prevEap
+$netlify = "$env:APPDATA\npm\netlify.cmd"
+if (-not (Test-Path $netlify)) { $netlify = 'netlify.cmd' }
 
 Write-Host @"
 
@@ -27,18 +32,18 @@ Or link manually at:
 Press Enter to run: netlify login
 "@ -ForegroundColor Yellow
 Read-Host
-netlify login
+& $netlify login
 
 Write-Host "`nLink this folder to your Netlify site:" -ForegroundColor Cyan
-netlify link
+& $netlify link
 
 Write-Host "`nDeploy preview..." -ForegroundColor Cyan
-netlify deploy --build
+& $netlify deploy --build
 
 Write-Host "`nDeploy PRODUCTION? (y/n)" -ForegroundColor Yellow
 if ((Read-Host) -eq 'y') {
-  netlify deploy --prod --build
-  netlify open:site
+  & $netlify deploy --prod --build
+  & $netlify open:site
 }
 
 Write-Host "`nNext: add env vars (run scripts/netlify-env-checklist.ps1)" -ForegroundColor Green

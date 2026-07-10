@@ -3,8 +3,18 @@ kroger-config.json
 walmart-config.json
 store-apis-config.json
 config.local.js
+.env.netlify
+.firebase-sa.json
+firebase/web-sdk-config.txt
+ios/GoogleService-Info.plist
 
 # OS / editor
 .DS_Store
 Thumbs.db
 *.log
+# Local Netlify folder
+.netlify
+.netlify-build.json
+
+# Netlify function dependencies (installed at build)
+netlify/functions/node_modules/

@@ -6,11 +6,11 @@ const CONFIG_LOCAL = {
   firebase: {
     enabled: true,
     apiKey: 'YOUR_FIREBASE_API_KEY',
-    authDomain: 'YOUR_PROJECT.firebaseapp.com',
-    projectId: 'YOUR_PROJECT_ID',
-    storageBucket: 'YOUR_PROJECT.appspot.com',
-    messagingSenderId: '123456789',
-    appId: '1:123456789:web:abc123',
+    authDomain: 'plateplanr-17793.firebaseapp.com',
+    projectId: 'plateplanr-17793',
+    storageBucket: 'plateplanr-17793.firebasestorage.app',
+    messagingSenderId: '154688205764',
+    appId: '1:154688205764:web:YOUR_WEB_APP_HASH',
   },
   stripe: {
     enabled: true,
