@@ -2093,7 +2093,7 @@ const App = (() => {
           ` : `
             <p class="text-xs text-slate-500">Sign in with a cloud account, then upgrade. Meal planning stays free.</p>
             <button type="button" onclick="App.upgradeToPro()" class="btn-primary w-full" ${!stripeOn ? 'disabled title="Add Stripe price ID in config"' : ''}>
-              <i class="fa-solid fa-bolt"></i> Upgrade to Pro
+              <i class="fa-solid fa-bolt"></i> Upgrade to Pro${stripeOn && APP_CONFIG.stripe?.proPriceLabel ? ` — ${APP_CONFIG.stripe.proPriceLabel}` : ''}
             </button>
             ${!stripeOn ? '<p class="text-xs text-slate-400">Add stripe.priceId in config.local.js (or Netlify env vars).</p>' : ''}
           `}

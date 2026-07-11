@@ -15,6 +15,7 @@ const APP_CONFIG = {
   stripe: {
     enabled: false,
     priceId: '', // Stripe Price ID for Pro monthly (price_...)
+    proPriceLabel: '$0.99/mo',
   },
 
   openai: {
@@ -42,4 +43,5 @@ if (typeof CONFIG_LOCAL !== 'undefined' && CONFIG_LOCAL) {
   if (CONFIG_LOCAL.openai) Object.assign(APP_CONFIG.openai, CONFIG_LOCAL.openai);
   if (CONFIG_LOCAL.firebase?.apiKey) APP_CONFIG.firebase.enabled = CONFIG_LOCAL.firebase.enabled !== false;
   if (CONFIG_LOCAL.stripe?.priceId) APP_CONFIG.stripe.enabled = CONFIG_LOCAL.stripe.enabled !== false;
+  if (CONFIG_LOCAL.stripe?.proPriceLabel) APP_CONFIG.stripe.proPriceLabel = CONFIG_LOCAL.stripe.proPriceLabel;
 }
