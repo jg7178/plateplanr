@@ -37,13 +37,13 @@ Write-Host 'Tip: copy .env.netlify.example to .env.netlify, fill in, re-run this
 Write-Host ''
 
 $vars = @(
-  @{ Name = 'FIREBASE_API_KEY'; Secret = $true },
+  @{ Name = 'FIREBASE_API_KEY'; Secret = $false },
   @{ Name = 'FIREBASE_AUTH_DOMAIN'; Secret = $false },
   @{ Name = 'FIREBASE_PROJECT_ID'; Secret = $false },
   @{ Name = 'FIREBASE_STORAGE_BUCKET'; Secret = $false },
   @{ Name = 'FIREBASE_MESSAGING_SENDER_ID'; Secret = $false },
   @{ Name = 'FIREBASE_APP_ID'; Secret = $false },
-  @{ Name = 'STRIPE_PRICE_ID'; Secret = $true },
+  @{ Name = 'STRIPE_PRICE_ID'; Secret = $false },
   @{ Name = 'STRIPE_SECRET_KEY'; Secret = $true },
   @{ Name = 'STRIPE_WEBHOOK_SECRET'; Secret = $true }
 )

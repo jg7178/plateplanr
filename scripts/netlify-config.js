@@ -1,4 +1,6 @@
 // Writes config.local.js from Netlify environment variables at build time.
+// IMPORTANT: FIREBASE_API_KEY, FIREBASE_APP_ID, STRIPE_PRICE_ID must NOT be
+// Netlify "secret" vars — secrets are masked (****************) in build output.
 const fs = require('fs');
 const path = require('path');
 

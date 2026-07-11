@@ -1,4 +1,4 @@
-const CACHE = 'plateplanr-v38';
+const CACHE = 'plateplanr-v39';
 const ASSETS = [
   './',
   './index.html',
